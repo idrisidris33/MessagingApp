@@ -1,2 +1,2 @@
 # MessagingApp
-Simple practice for flutter and fierbase and simple ui design 
+Simple practice for flutter and fierbase with simple ui design 
