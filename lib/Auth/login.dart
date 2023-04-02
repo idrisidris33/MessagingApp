@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,7 +21,7 @@ class _LoginState extends State<Login> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
-                'Register',
+                'Signin',
                 style: GoogleFonts.ubuntu(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -34,7 +35,7 @@ class _LoginState extends State<Login> {
 
               Image.asset("assets/images/signin.png"),
               Text(
-                "Welcome back! Enter your login details to join the conversation",
+                "Access your account and start exploring our platform",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.ubuntu(
                     fontWeight: FontWeight.bold, fontSize: 18),
@@ -72,7 +73,9 @@ class _LoginState extends State<Login> {
                       style: GoogleFonts.ubuntu(fontWeight: FontWeight.w500),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
                       child: const Text(
                         'Sign In',
                         style: TextStyle(
@@ -89,7 +92,8 @@ class _LoginState extends State<Login> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     fixedSize: const Size.fromWidth(250)),
-                child: const Text('Register'),
+                child: Text('Signin',
+                    style: GoogleFonts.ubuntu(fontWeight: FontWeight.w600)),
               )
             ]),
           ),
