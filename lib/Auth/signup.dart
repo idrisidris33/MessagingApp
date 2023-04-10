@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:messages_app/Auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../home.dart';
+
 class Signup extends StatefulWidget {
   const Signup({super.key});
 
@@ -11,6 +13,17 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmpassword = TextEditingController();
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    confirmpassword.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +62,7 @@ class _SignupState extends State<Signup> {
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white),
                   child: TextFormField(
+                      controller: email,
                       decoration: const InputDecoration(
                           hintText: "Email", border: InputBorder.none))),
               Container(
@@ -59,8 +73,23 @@ class _SignupState extends State<Signup> {
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white),
                   child: TextFormField(
+                      obscureText: true,
+                      controller: password,
                       decoration: const InputDecoration(
                           hintText: "Password", border: InputBorder.none))),
+              Container(
+                  margin: const EdgeInsets.only(
+                      left: 0, right: 0, top: 10, bottom: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white),
+                  child: TextFormField(
+                      obscureText: true,
+                      controller: password,
+                      decoration: const InputDecoration(
+                          hintText: "Confirme Password",
+                          border: InputBorder.none))),
               // i'm going to search for an awesom font . . .
 
               Padding(
@@ -88,7 +117,20 @@ class _SignupState extends State<Signup> {
               ),
 
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    var user = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: email.text, password: password.text);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => const Home()));
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  print(email.text);
+                  print(password.text);
+                },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
