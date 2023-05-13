@@ -16,7 +16,7 @@ class AuthMethod extends StatelessWidget {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
-                'Messages NOW',
+                'Messages Now',
                 style: GoogleFonts.ubuntu(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -29,13 +29,15 @@ class AuthMethod extends StatelessWidget {
               // TextStyle(fontSize: 26),
 
               Image.asset("assets/images/signin.png"),
-              Text(
-                "Welcome",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.ubuntu(
-                    fontWeight: FontWeight.bold, fontSize: 18),
+              // Text(
+              //   "Welcome",
+              //   textAlign: TextAlign.center,
+              //   style: GoogleFonts.ubuntu(
+              //       fontWeight: FontWeight.bold, fontSize: 18),
+              // ),
+const SizedBox(
+                height: 80,
               ),
-
               ElevatedButton(
                 onPressed: () async {
                   Navigator.of(context).push(MaterialPageRoute(

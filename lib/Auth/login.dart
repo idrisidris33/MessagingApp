@@ -124,13 +124,17 @@ class _LoginState extends State<Login> {
                     //       builder: ((context) => const Text('fjfjfjfj')));
                     // }
                   } on FirebaseAuthException catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        duration: const Duration(seconds: 6),
-                        content: Text(e.message.toString())));
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print(e);
+                    getMessageFromErrorCode(e.code);
+                    SnackBar(content: Text(e.code));
                   }
+                  // on FirebaseAuthException catch (e) {
+                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //       duration: const Duration(seconds: 6),
+                  //       content: Text(e.message.toString())));
+                  //   Navigator.pop(context);
+                  // } catch (e) {
+                  //   print(e);
+                  // }
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -150,3 +154,39 @@ class _LoginState extends State<Login> {
 // Access your account and start exploring our platform   Signin
 // Connect with friends and start chatting in real-time   Login
 // Welcome back! Enter your login details to join the conversation
+String getMessageFromErrorCode(var errorCode) {
+  switch (errorCode) {
+    case "ERROR_EMAIL_ALREADY_IN_USE":
+    case "account-exists-with-different-credential":
+    case "email-already-in-use":
+      return "Email already used. Go to login page.";
+      break;
+    case "ERROR_WRONG_PASSWORD":
+    case "wrong-password":
+      return "Wrong email/password combination.";
+      break;
+    case "ERROR_USER_NOT_FOUND":
+    case "user-not-found":
+      return "No user found with this email.";
+      break;
+    case "ERROR_USER_DISABLED":
+    case "user-disabled":
+      return "User disabled.";
+      break;
+    case "ERROR_TOO_MANY_REQUESTS":
+    case "operation-not-allowed":
+      return "Too many requests to log into this account.";
+      break;
+    case "ERROR_OPERATION_NOT_ALLOWED":
+    case "operation-not-allowed":
+      return "Server error, please try again later.";
+      break;
+    case "ERROR_INVALID_EMAIL":
+    case "invalid-email":
+      return "Email address is invalid.";
+      break;
+    default:
+      return "Login failed. Please try again.";
+      break;
+  }
+}
