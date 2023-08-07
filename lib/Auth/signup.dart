@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:messages_app/Auth/login.dart';
@@ -86,7 +88,7 @@ class _SignupState extends State<Signup> {
                       color: Colors.white),
                   child: TextFormField(
                       obscureText: true,
-                      controller: password,
+                      controller: confirmpassword,
                       decoration: const InputDecoration(
                           hintText: "Confirme Password",
                           border: InputBorder.none))),
@@ -98,7 +100,7 @@ class _SignupState extends State<Signup> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'If you are not member ',
+                      'If you are  member ',
                       style: GoogleFonts.ubuntu(fontWeight: FontWeight.w500),
                     ),
                     InkWell(
@@ -107,7 +109,7 @@ class _SignupState extends State<Signup> {
                             builder: (BuildContext context) => const Login()));
                       },
                       child: const Text(
-                        'Sign Up',
+                        'Sign in',
                         style: TextStyle(
                             color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
@@ -118,6 +120,16 @@ class _SignupState extends State<Signup> {
 
               ElevatedButton(
                 onPressed: () async {
+                  if (password.text != confirmpassword.text) {
+                  if(Platform.isAndroid){
+                    const snackBar = SnackBar(
+                      content: Text('password dosent match together '),
+                      duration: const Duration(seconds: 20),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  
+                  }
                   try {
                     var user = await FirebaseAuth.instance
                         .createUserWithEmailAndPassword(
@@ -125,6 +137,7 @@ class _SignupState extends State<Signup> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => const Home()));
                   } catch (e) {
+                    print(e);
                     print(e);
                   }
 

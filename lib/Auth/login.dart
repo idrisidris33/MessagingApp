@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -13,6 +14,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  final _user = FirebaseAuth.instance;
   @override
   void dispose() {
     email.dispose();
@@ -89,7 +91,7 @@ class _LoginState extends State<Login> {
                         Navigator.of(context).pop();
                       },
                       child: const Text(
-                        'Sign In',
+                        'Login In',
                         style: TextStyle(
                             color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
@@ -101,31 +103,29 @@ class _LoginState extends State<Login> {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        });
-                    var user = await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: email.text, password: password.text);
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(),
+                    //       );
+                    //     });
+                    await _user.signInWithEmailAndPassword(
+                        email: email.text, password: password.text);
 
-                    if (user != null) {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => const Home()));
-                    }
-                    //  else {
-                    //   // ignore: use_build_context_synchronously
-                    //   showDialog(
-                    //       context: context,
-                    //       builder: ((context) => const Text('fjfjfjfj')));
-                    // }
-                  } on FirebaseAuthException catch (e) {
-                    getMessageFromErrorCode(e.code);
-                    SnackBar(content: Text(e.code));
+                    // Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => const Home()));
+                  } on FirebaseAuthException catch (error) {
+                    print("ERROR CODE ${error.code}");
+                    print("ERROR MESSAGES ${error.message}");
+                    // var erorr = getMessageFromErrorCode(e.code);
+                    var snackBar = SnackBar(
+                      content: Text(error.code.toString()),
+                      duration: const Duration(seconds: 20),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                   // on FirebaseAuthException catch (e) {
                   //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -140,9 +140,21 @@ class _LoginState extends State<Login> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     fixedSize: const Size.fromWidth(250)),
-                child: Text('Signin',
+                child: Text('Login',
                     style: GoogleFonts.ubuntu(fontWeight: FontWeight.w600)),
-              )
+              ),
+
+              // test showing snakbar
+              ElevatedButton(
+                  onPressed: () {
+                    var snackBar = SnackBar(
+                      content: Text("kdfgkjs"),
+                      duration: Duration(seconds: 20),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  child: Text("snakbar"))
             ]),
           ),
         ),

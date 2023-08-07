@@ -11,33 +11,32 @@ import 'home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
-            apiKey: "AIzaSyDEpKbowqiTH9r0OsUJ_Zu0esZfIQslq38",
-            appId: "1:390019431802:web:20e502b33ea8775b446ac3",
-            messagingSenderId: "390019431802",
-            projectId: "messegenow-c3244"));
-  } else {
-    await Firebase.initializeApp();
-  }
+  // if (kIsWeb) {
+  //   await Firebase.initializeApp(
+  //       options: const FirebaseOptions(
+  //           apiKey: "AIzaSyDEpKbowqiTH9r0OsUJ_Zu0esZfIQslq38",
+  //           appId: "1:390019431802:web:20e502b33ea8775b446ac3",
+  //           messagingSenderId: "390019431802",
+  //           projectId: "messegenow-c3244"));
+  // } else {
+  await Firebase.initializeApp();
+  // }
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final _auth = FirebaseAuth.instance;
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //  home: AuthMethod(),
-     home: Simple(),
-       );
+      // home: _auth.currentUser != null ? const Home() : const AuthMethod(),
+      home: const Home(),
+    );
   }
-}   
-     
-
-
-
+}
+// to get the sha1 key just write in terminal   cd android  tap enter 
+//  and after that write ./gradlew signingReport 

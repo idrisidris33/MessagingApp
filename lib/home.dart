@@ -32,13 +32,13 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void streamMessages() async {
-    await for (var snapshot in _send.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
-        print(message.data());
-      }
-    }
-  }
+  // void streamMessages() async {
+  //   await for (var snapshot in _send.collection('messages').snapshots()) {
+  //     for (var message in snapshot.docs) {
+  //       print(message.data());
+  //     }
+  //   }
+  // }
 
   // void getmesseges() async {
   //   var messages = await _send.collection("messages").get();
@@ -50,15 +50,14 @@ class _HomeState extends State<Home> {
   //         "messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage");
   //   }
   // }
-  void messagesStream() async {
-    await for (var snapshot in _send.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        print(message.data());
-      }
-      ;
-    }
-  }
+  // void messagesStream() async {
+  //   await for (var snapshot in _send.collection('messages').snapshots()) {
+  //     for (var message in snapshot.docs) {
+  //       print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  //       print(message.data());
+  //     }
+  //   }
+  // }
 
   void getCurrentUser() {
     final user = _auth.currentUser;
@@ -74,6 +73,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     getCurrentUser();
+    messagesWidgets.clear();
   }
 
   @override
@@ -180,27 +180,34 @@ class _HomeState extends State<Home> {
   }
 }
 
+List<MessageStyle> messagesWidgets = [];
+
 class StreamMessages extends StatelessWidget {
   StreamMessages({super.key});
   final _send = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _send.collection('messages').snapshots(),
         builder: (context, snapshot) {
-          List<MessageStyle> messagesWidgets = [];
+         
+        
           if (!snapshot.hasData) {
             //add loading
             return const Center(
-                child: CircularProgressIndicator(
-              color: Colors.grey,
-            ));
+                child:Text("No datat exist")
+            //      CircularProgressIndicator(
+            //   color: Colors.grey,
+            // )
+            );
           }
 
           final messages = snapshot.data!.docs;
           for (var message in messages) {
             final text = message.get('text');
             final sender = message.get('sender');
+            // messagesWidgets.clear();
             final messagewidget = MessageStyle(
               sender: "$sender",
               text: "$text",
@@ -238,15 +245,18 @@ class MessageStyle extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text("$sender"),
+        Text(sender),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: Material(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15)),
             color: Colors.amber,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Text("$text"),
+              child: Text(text),
             ),
           ),
         ),
